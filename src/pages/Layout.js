@@ -16,18 +16,12 @@ function Layout() {
         bsModal.show();
     };
     const handleCloseModel = () => {
-        // const modalElement = document.getElementById('uploadModal');
-        // const bsModal = new Modal(modalElement);
         let myModalEl = document.getElementById('uploadModal');
         let myModalE2 = document.querySelector('.modal-backdrop');
-        // let modal = bootstrap.Modal.getInstance(myModalEl)
-        // modal.hide()
         myModalEl.classList.remove('show');
         myModalE2.remove();
         myModalEl.setAttribute('aria-hidden', 'true');
         myModalEl.setAttribute('style', 'display: none');
-        // modalElement.trigger(' hidden.bs.modal');
-        //bsModal.hide();
     }
     const handleFileUpload = () => {
         const file = fileInput.current.files[0];
@@ -64,7 +58,7 @@ function Layout() {
                                         <input type="file" ref={fileInput} />
                                     </div>
                                     <div className="modal-footer">
-                                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" onClick={handleCloseModel}  className="btn btn-secondary" data-dismiss="modal">Close</button>
                                         <button type="button" className="btn btn-primary" onClick={handleFileUpload}>Upload</button>
                                     </div>
                                 </div>

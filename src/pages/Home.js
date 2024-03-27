@@ -29,24 +29,73 @@ function Home() {
       function handleDataFromChildFontSize(data) {
         setfontSize(data);
       }
-      const applyColor = () => {
-        // Apply color to background
+      fetch('http://localhost:3001/api/color-id')
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.json();
+  })
+  .then(data => {
+      console.log('Data from server:', data); // Log the entire data object
+      const color_id = data.color_id;
+      const fColor = data.fontColor;
+      const BGColor = data.backgroundColor;
+      const BtnTextColor1 = data.BtnTextColor;
+      const BtnbgColor = data.BtnBgcolor;
+      const fontSize = data.fontSize;
+      localStorage.setItem('color_id', color_id);
+      localStorage.setItem('fColor', fColor);
+      localStorage.setItem('BGColor', BGColor);
+      localStorage.setItem('BtnTextColor1', BtnTextColor1);
+      localStorage.setItem('BtnbgColor', BtnbgColor);
+      localStorage.setItem('fontSize', fontSize);
+     
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
+
+  const applyColor = () => {
+  
+    console.log(fColor, BGColor, BtnTextColor1, BtnbgColor, fontSize);
+
+    if (!fColor) {
+      fColor = localStorage.getItem('fColor'); 
+  }
+  if (!BGColor) {
+      BGColor = localStorage.getItem('BGColor');
+  }
+  if (!BtnTextColor1) {
+      BtnTextColor1 = localStorage.getItem('BtnTextColor1');
+  if (!BtnbgColor) {
+      BtnbgColor =  localStorage.getItem('BtnbgColor');
+  }
+  if (!fontSize) {
+      fontSize =localStorage.getItem('fontSize');
+  }
     
-        // Send a request to the server to update the JSON file
-        fetch('http://localhost:3001/api/update-color', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            fontColor: fColor,
-            backgroundColor: BGColor,
-            BtnTextColor: BtnTextColor1,
-            BtnBgcolor: BtnbgColor,
-            fontSize: fontSize,
-          }),
-        });
-      };
+    // Send a request to the server to update the JSON file
+    fetch('http://localhost:3001/api/update-color', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fontColor: fColor,
+        backgroundColor: BGColor,
+        BtnTextColor: BtnTextColor1,
+        BtnBgcolor: BtnbgColor,
+        fontSize: fontSize,
+      }),
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+  };
+}
   return (
     <div className="App">
       <div className="max-container">
