@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "../App.css";
 import FontColor from "../components/FontColor/FontColor";
 import BackgroundColor from "../components/BackgroundColor/BacgroundColor";
@@ -6,14 +6,37 @@ import BtnBgColor from "../components/BtnBgColor/BtnBgColor";
 import BtnTextColor2 from "../components/BtnTextColor/BtnTextColor";
 import FontSize from "../components/FontSize/FontSize";
 import LeftSideComponent from "../components/LeftSideComponent/LeftSideComponent";
+import { json } from "react-router-dom";
 
-function Home() {
+function Home({importedData}) {
     const [fColor, setFColor] = useState("");
     const [BGColor, setBGColor] = useState("");
     const [BtnTextColor1, setBtntextColor] = useState("");
     const [BtnbgColor, setBtnbgColor] = useState("");
     const [fontSize, setfontSize] = useState("");
+    //const [datafromImport, setdatafromImport] = useState("");
+    useEffect(() => {
+      if(importedData?.length>0) {
+        const obj = importedData
+        .split('\r\n') 
+        .map(keyVal => { 
+          return keyVal
+            .split(':')
+            .map(_ => _.trim().replace(',',"")) 
+        })
+        .reduce((accumulator, currentValue) => { 
+          accumulator[currentValue[0]] = currentValue[1]
 
+          return accumulator
+        }, {}) 
+        setFColor(obj.fontColor);
+        setBGColor(obj.backgroundColor);
+        setBtntextColor(obj.BtnTextColor);
+        setBtnbgColor(obj.BtnBgcolor);
+        setfontSize(obj.fontSize);
+    }
+    },[importedData])
+    
     function handleDataFromChildFC(data) {
         setFColor(data);
       }
@@ -102,11 +125,11 @@ function Home() {
         <div className="row content-wrapper">
           <div className="col-lg-3 left-section">
             <h3 className="sidebar-title">Select Your Theme</h3>
-            <FontColor sendDataToParent={handleDataFromChildFC} />
-            <FontSize sendDataToParent={handleDataFromChildFontSize} />
-            <BackgroundColor sendDataToParent={handleDataFromChildBG} />
-            <BtnBgColor sendDataToParent={handleDataFromChildBtnBg} />
-            <BtnTextColor2 sendDataToParent={handleDataFromChildBtnTxt} />
+            <FontColor importdata={fColor} sendDataToParent={handleDataFromChildFC} />
+            <FontSize importdata={fontSize} sendDataToParent={handleDataFromChildFontSize} />
+            <BackgroundColor importdata={BGColor} sendDataToParent={handleDataFromChildBG} />
+            <BtnBgColor importdata={BtnbgColor} sendDataToParent={handleDataFromChildBtnBg} />
+            <BtnTextColor2 importdata={BtnTextColor1} sendDataToParent={handleDataFromChildBtnTxt} />
            
             <button className="apply-color" onClick={applyColor}>Apply Color</button>
           </div>

@@ -5,13 +5,17 @@ import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 
 function App() {
+  const [importData, setimportData] = useState("");
+  const handleDataFromChildCMP = (data) => {
+    setimportData(data);
+  }
   return (
     <div className="App">
       <Header />
     <BrowserRouter>
       <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/" element={<Layout />}>
+          <Route path="/home" element={<Home importedData={importData}/>} />
+          <Route path="/" element={<Layout sendDataToParent={handleDataFromChildCMP} />}>
         </Route>
       </Routes>
     </BrowserRouter>

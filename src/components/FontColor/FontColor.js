@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SketchPicker } from 'react-color';
 
-function FontColor({sendDataToParent}) {
+function FontColor({sendDataToParent,importdata}) {
     const [fontColor, setFontColor] = useState("#0081c6");
     const [displayColorPicker, setDisplayColorPicker] = useState(false);
     const popover = useRef();
@@ -16,7 +16,9 @@ function FontColor({sendDataToParent}) {
     const handleClick = () => {
       setDisplayColorPicker(true);
     };
-
+    useEffect(() => {
+        setFontColor(importdata)
+    },[importdata])
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (popover.current && !popover.current.contains(event.target)) {

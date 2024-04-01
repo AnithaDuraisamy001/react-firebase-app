@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 
-function FontSize({sendDataToParent}) {
+function FontSize({sendDataToParent,importdata}) {
     const [FontSize, setFontSize] = useState("16px");
     const handleBackgroundColorChange = (event) => {
       setFontSize(event.target.value);  
       sendDataToParent(event.target.value);
       };
+      useEffect(() => {
+        setFontSize(importdata);
+      },[importdata]) 
     return (
         <form>
         <label>

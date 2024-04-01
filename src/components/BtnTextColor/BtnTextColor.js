@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SketchPicker } from 'react-color';
 
-function BtnTextColor({sendDataToParent}) {
+function BtnTextColor({sendDataToParent,importdata}) {
   const [BtnTextColor1, setBtnTextColor] = useState("#FFFFFF");
     const [displayColorPicker, setDisplayColorPicker] = useState(false);
     const popover = useRef();
@@ -14,7 +14,9 @@ function BtnTextColor({sendDataToParent}) {
     const handleClick = () => {
       setDisplayColorPicker(true);
     };
-
+    useEffect(() => {
+        setBtnTextColor(importdata)
+    },[importdata])
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (popover.current && !popover.current.contains(event.target)) {

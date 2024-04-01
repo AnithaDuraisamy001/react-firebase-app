@@ -5,11 +5,9 @@ import { Modal } from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-function Layout() {
-
+function Layout({sendDataToParent}) {
     const navigate = useNavigate();
     const fileInput = useRef();
-
     const handleImportClick = () => {
         const modalElement = document.getElementById('uploadModal');
         const bsModal = new Modal(modalElement);
@@ -22,15 +20,36 @@ function Layout() {
         myModalE2.remove();
         myModalEl.setAttribute('aria-hidden', 'true');
         myModalEl.setAttribute('style', 'display: none');
+        let body = document.querySelector('body');
+        body.classList.remove('modal-open');
+        body.classList.add('remove-hidden');
     }
-    const handleFileUpload = () => {
+    const handleFileUpload = (e) => {
         const file = fileInput.current.files[0];
         // Handle the file upload here
-        console.log(file);
+       // console.log(file);
         const modalElement = document.getElementById('uploadModal');
         const bsModal = new Modal(modalElement);
         bsModal.hide();
+        var reader = new FileReader();
+        var fileToRead = document.querySelector('input').files[0];
+        reader.addEventListener("loadend", function() {
+       // alert(reader.result);
+        sendDataToParent(reader.result);
+        });
+        reader.readAsText(fileToRead);
+        let myModalEl = document.getElementById('uploadModal');
+        let myModalE2 = document.querySelector('.modal-backdrop');
+        myModalEl.classList.remove('show');
+        myModalE2.remove();
+        let body = document.querySelector('body');
+        body.classList.remove('modal-open');
+        body.classList.add('remove-hidden')
+        myModalEl.setAttribute('aria-hidden', 'true');
+        myModalEl.setAttribute('style', 'display: none');
+        navigate("/home")
     };
+    
   return (
     <div className="App mt-5">
         <h1>Theme Builder Tool</h1>
@@ -55,11 +74,11 @@ function Layout() {
                                         </button>
                                     </div>
                                     <div className="modal-body">
-                                        <input type="file" ref={fileInput} />
+                                        <input accept=".json" type="file" ref={fileInput} />
                                     </div>
                                     <div className="modal-footer">
                                         <button type="button" onClick={handleCloseModel}  className="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" className="btn btn-primary" onClick={handleFileUpload}>Upload</button>
+                                        <button type="button" className="btn btn-primary"  onClick={handleFileUpload}>Upload</button>
                                     </div>
                                 </div>
                             </div>
@@ -69,3 +88,4 @@ function Layout() {
   );
 }
 export default Layout;
+
